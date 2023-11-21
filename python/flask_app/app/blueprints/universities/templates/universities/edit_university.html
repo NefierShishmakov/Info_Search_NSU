@@ -1,0 +1,48 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+    <h3 class="title">Изменить студента</h3>
+    <div class="box">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="notification is-danger">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form method="POST" action="/universities/edit/{{ university.id }}">
+            <div class="field">
+                <div class="control">
+                    {% if session['short_name'] %}
+                        <input class="input is-large" type="text" maxlength="15" value="{{ session['short_name'] }}" name="short_name" placeholder="Сокращённое название" autofocus="">
+                    {% else %}
+                        <input class="input is-large" type="text" maxlength="15" value="{{ university.short_name }}" name="short_name" placeholder="Сокращённое название" autofocus="">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    {% if session['full_name'] %}
+                        <input class="input is-large" type="text" value="{{ session['full_name'] }}" maxlength="300" name="full_name" placeholder="Полное название">
+                    {% else %}
+                        <input class="input is-large" type="text" value="{{ university.full_name }}" maxlength="300" name="full_name" placeholder="Полное название">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    {% if session['founding_date'] %}
+                        <input class="input is-large" type="date" value="{{ session['founding_date'] }}" name="founding_date" placeholder="Дата основания">
+                    {% else %}
+                        <input class="input is-large" type="date" value="{{ university.founding_date }}" name="founding_date" placeholder="Дата основания">
+                    {% endif %}
+                </div>
+            </div>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <button class="button is-block is-info is-large is-fullwidth">Изменить</button>
+        </form>
+        <a class="button is-block is-info is-large is-fullwidth" href="{{ url_for('universities.list_universities') }}" style="margin-top: 15px;">Назад</a>
+    </div>
+</div>
+{% endblock %}

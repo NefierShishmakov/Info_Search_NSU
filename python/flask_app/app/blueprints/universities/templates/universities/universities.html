@@ -1,0 +1,46 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+    <h3 class="title">Список университетов</h3>
+    {% if universities_list %}
+        <table class="table center">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>Сокращённое название</th>
+                <th class="has-text-centered">Полное название</th>
+                <th>Дата основания</th>
+                <th>Изменить</th>
+                <th>Удалить</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for university in universities_list %}
+            <tr>
+                <th>{{ university.id }}</th>
+                <td class="has-text-centered">{{ university.short_name }}</td>
+                <td class="has-text-centered">{{ university.full_name }}</td>
+                <td class="has-text-centered">{{ university.founding_date.strftime('%d.%m.%Y') }}</td>
+                <td class="has-text-centered">
+                    <a class="button" href="/universities/edit/{{ university.id }}">
+                        <span class="icon is-small">
+                            <i class="fas fa-solid fa-pen"></i>
+                        </span>
+                    </a>
+                </td>
+                <td class="has-text-centered">
+                    <a class="button" href="/universities/delete/{{ university.id }}">
+                        <span class="icon is-small">
+                            <i class="fa-solid fa-trash"></i>
+                        </span>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a class="button is-info is-large" href="{{ url_for('universities.add_university') }}">Добавить университет</a>
+    {% else %}
+        <p class="subtitle is-3">База данных пуста</p>
+    {% endif %}
+{% endblock %}

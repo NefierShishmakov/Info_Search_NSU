@@ -1,0 +1,49 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+    <h3 class="title">Регистрация</h3>
+    <div class="box">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category == "auth" %}
+                        <div class="notification is-danger">
+                            {{ message }}. Перейти на страницу <a href="{{ url_for('auth.login') }}">логина</a>.
+                        </div>
+                    {% else %}
+                        <div class="notification is-danger">
+                            {{ message }}.
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form method="POST" action="/signup">
+            <div class="field">
+                <div class="control">
+                    {% if session['login'] %}
+                        <input class="input is-large" maxlength="56" value="{{ session['login'] }}" type="text" name="login" placeholder="Login" autofocus="">
+                    {% else %}
+                        <input class="input is-large" maxlength="56" type="text" name="login" placeholder="Login" autofocus="">
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="password" maxlength="30" name="password" placeholder="Password">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="password" name="confirm_password" placeholder="Retype password">
+                </div>
+            </div>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <button class="button is-block is-info is-large is-fullwidth">Зарегистрироваться</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

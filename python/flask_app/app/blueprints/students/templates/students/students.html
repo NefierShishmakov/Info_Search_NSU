@@ -1,0 +1,48 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+    <h3 class="title">Список студентов</h3>
+    {% if students_list %}
+        <table class="table center">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th class="has-text-centered">ФИО</th>
+                <th>Дата рождения</th>
+                <th>Год поступления</th>
+                <th>Университет</th>
+                <th>Изменить</th>
+                <th>Удалить</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for student in students_list %}
+            <tr>
+                <th>{{ student.id }}</th>
+                <td class="has-text-centered">{{ student.fio }}</td>
+                <td class="has-text-centered">{{ student.birth_date.strftime('%d.%m.%Y') }}</td>
+                <td class="has-text-centered">{{ student.admission_year }}</td>
+                <td class="has-text-centered">{{ student.university.short_name }}</td>
+                <td class="has-text-centered">
+                    <a class="button" href="/students/edit/{{ student.id }}">
+                        <span class="icon is-small">
+                            <i class="fas fa-solid fa-pen"></i>
+                        </span>
+                    </a>
+                </td>
+                <td class="has-text-centered">
+                    <a class="button" href="/students/delete/{{ student.id }}">
+                        <span class="icon is-small">
+                            <i class="fa-solid fa-trash"></i>
+                        </span>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a class="button is-info is-large" href="{{ url_for('students.add_student') }}">Добавить студента</a>
+    {% else %}
+        <p class="subtitle is-3">База данных пуста</p>
+    {% endif %}
+{% endblock %}

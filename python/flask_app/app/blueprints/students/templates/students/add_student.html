@@ -1,0 +1,63 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+    <h3 class="title">Добавить студента</h3>
+    <div class="box">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="notification is-danger">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form method="POST" action="{{ url_for('students.add_student') }}">
+            <div class="field">
+                <div class="control">
+                    {% if session['fio'] %}
+                        <input class="input is-large" type="text" maxlength="100" value="{{ session['fio'] }}" name="fio" placeholder="ФИО студента" autofocus="">
+                    {% else %}
+                        <input class="input is-large" type="text" maxlength="100" name="fio" placeholder="ФИО студента" autofocus="">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    {% if session['birth_date'] %}
+                        <input class="input is-large" type="date" value="{{ session['birth_date'] }}" name="birth_date" placeholder="Дата рождения студента">
+                    {% else %}
+                        <input class="input is-large" type="date" name="birth_date" placeholder="Дата рождения студента">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    {% if session['admission_year'] %}
+                        <input class="input is-large" type="text" minlength="4" maxlength="4" value="{{ session['admission_year'] }}" name="admission_year" placeholder="Год поступления">
+                    {% else %}
+                        <input class="input is-large" type="text" minlength="4" maxlength="4" name="admission_year" placeholder="Год поступления">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <div class="select is-large">
+                        <select name="university_id">
+                            {% for university in universities %}
+                                {% if ( (session['university_id']) and (university.id == session['university_id']) ) %}
+                                    <option value="{{ university.id }}" selected>{{ university.short_name }}</option>
+                                {% else %}
+                                    <option value="{{ university.id }}">{{ university.short_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <button class="button is-block is-info is-large is-fullwidth">Добавить</button>
+        </form>
+        <a class="button is-block is-info is-large is-fullwidth" href="{{ url_for('students.list_students') }}" style="margin-top: 15px;">Назад</a>
+    </div>
+</div>
+{% endblock %}
